@@ -56,6 +56,8 @@
 #define DHCPRELEASE 7
 #define DHCPINFORM 8
 
+#define MAGIC_COOKIE (uint16_t)0x63825363
+
 struct {
   /* 0: Message opcode/type */
   uint8_t op;
@@ -93,4 +95,4 @@ struct {
   const uint16_t magic;
   /* 140: DHCP options */
   unsigned char *options;
-} dhcp_packet = {.magic = 0x63825363, .sname = {0}, .file = {0}};
+} dhcp_packet;
