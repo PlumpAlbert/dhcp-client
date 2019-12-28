@@ -58,7 +58,7 @@
 
 #define MAGIC_COOKIE (uint16_t)0x63825363
 
-struct {
+typedef struct {
   /* 0: Message opcode/type */
   uint8_t op;
   /* 1: Hardware address type (net/if_types.h) */
@@ -92,7 +92,7 @@ struct {
    */
   unsigned char file[DHCP_FILE_LEN];
   /* 136: Magic cookie :D */
-  const uint16_t magic;
+  uint16_t magic;
   /* 140: DHCP options */
   unsigned char *options;
 } dhcp_packet;
