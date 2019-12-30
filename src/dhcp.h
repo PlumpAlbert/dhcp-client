@@ -56,7 +56,7 @@
 #define DHCPRELEASE 7
 #define DHCPINFORM 8
 
-#define MAGIC_COOKIE (uint16_t)0x63825363
+#define MAGIC_COOKIE 0x63825363
 
 typedef struct {
   /* 0: Message opcode/type */
@@ -91,8 +91,6 @@ typedef struct {
    * fully qualified directory-path name in DHCPOFFER
    */
   unsigned char file[DHCP_FILE_LEN];
-  /* 136: Magic cookie :D */
-  uint16_t magic;
-  /* 140: DHCP options */
-  unsigned char *options;
+  /* 136: DHCP options */
+  uint8_t *options;
 } dhcp_packet;
