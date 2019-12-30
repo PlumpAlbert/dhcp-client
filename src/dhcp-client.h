@@ -13,4 +13,5 @@
 
 unsigned char *const get_mac_address(const char *adapter_name);
 
-dhcp_packet *const create_dhcp_message();
+dhcp_packet *const dhcp_discover(unsigned char const *mac_address,
+                                 uint8_t *options, size_t options_len);

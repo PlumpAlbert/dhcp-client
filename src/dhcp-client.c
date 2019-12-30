@@ -3,8 +3,6 @@
 #define MAC_ADDRESS_LENGTH 6
 #define MAX_RELAY_HOPS 30
 
-#define IP_BROADCAST 0xFFFFFFFF
-
 /**
  * Returns constant pointer to MAC address of the adapter_name
  */
@@ -30,10 +28,9 @@ unsigned char *const get_mac_address(const char *adapter_name) {
 /**
  * Creates DHCP messages
  */
-dhcp_packet *const create_dhcp_message(unsigned char const *mac_address,
-                                       const unsigned char *options,
-                                       int options_len) {
-  dhcp_packet *const packet = malloc(sizeof(uint8_t));
+dhcp_packet *const dhcp_discover(unsigned char const *mac_address,
+                                 uint8_t *options, size_t options_len) {
+  dhcp_packet *const packet = malloc(sizeof(dhcp_packet));
   packet->op = DHCPDISCOVER;
   packet->htype = HTYPE_ETHERNET_10MB;
   packet->hlen = MAC_ADDRESS_LENGTH;
@@ -48,6 +45,7 @@ dhcp_packet *const create_dhcp_message(unsigned char const *mac_address,
   memcpy(packet->chaddr, mac_address, MAC_ADDRESS_LENGTH);
   memset(packet->sname, 0, DHCP_SNAME_LEN);
   memset(packet->file, 0, DHCP_FILE_LEN);
+  packet->options = malloc(sizeof(uint8_t) * options_len);
   memcpy(packet->options, options, options_len);
   return packet;
 }
