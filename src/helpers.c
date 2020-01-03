@@ -3,7 +3,7 @@
 //
 #include "../include/helpers.h"
 
-const char *get_mac_address(const char *adapter_name) {
+const unsigned char *get_mac_address(const char *adapter_name) {
   struct ifreq request;
   int socket_fd;
   // Opening socket
@@ -18,7 +18,7 @@ const char *get_mac_address(const char *adapter_name) {
     perror("ioctl");
     exit(2);
   }
-  const char *mac = request.ifr_hwaddr.sa_data;
+  const unsigned char *mac = request.ifr_hwaddr.sa_data;
   return mac;
 }
 

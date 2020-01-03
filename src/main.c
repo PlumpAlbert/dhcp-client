@@ -9,7 +9,7 @@ int main(int argc, char const *argv[]) {
     return 1;
   }
   printf("Getting MAC address of the \"%s\"...\n", argv[1]);
-  const char *mac = get_mac_address(argv[1]);
+  const unsigned char *mac = get_mac_address(argv[1]);
   printf("MAC address is: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1],
          mac[2], mac[3], mac[4], mac[5]);
 

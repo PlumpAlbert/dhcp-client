@@ -19,7 +19,7 @@
  * Returns MAC address of the adapter_name
  * @param adapter_name The name of the network adapter
  */
-const char *get_mac_address(const char *adapter_name);
+const unsigned char *get_mac_address(const char *adapter_name);
 
 /*
  * Prints packet body to stdout
