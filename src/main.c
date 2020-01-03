@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "dhcp-client.h"
+#include "../include/dhcp-client.h"
 
 void print_packet(dhcp_packet const *p) {
   // 26 chars per line
@@ -80,10 +80,11 @@ int main(int argc, char const *argv[]) {
   unsigned char *const mac = get_mac_address(argv[1]);
   printf("MAC address is: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1],
          mac[2], mac[3], mac[4], mac[5]);
+
   printf("Creating DHCP Discovery packet\n");
   uint8_t options[] = {DHCP_OPTION_MESSAGE_TYPE, sizeof(DHCPDISCOVER),
                        DHCPDISCOVER, DHCP_OPTION_END};
-  dhcp_packet *packet = dhcp_discover(mac, options, sizeof(options));
-  print_packet(packet);
+  //  dhcp_packet *packet = dhcp_message(mac);
+  //  print_packet(packet);
   return 0;
 }

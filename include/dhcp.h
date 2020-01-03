@@ -56,7 +56,7 @@
 #define DHCPRELEASE 7
 #define DHCPINFORM 8
 
-#define MAGIC_COOKIE 0x63825363
+const uint8_t *const MAGIC_COOKIE = (uint8_t[]){0x63, 0x82, 0x53, 0x63};
 
 typedef struct {
   /* 0: Message opcode/type */

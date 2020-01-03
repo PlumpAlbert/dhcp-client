@@ -1,38 +1,15 @@
-#include "dhcp-client.h"
+#include "../include/dhcp-client.h"
 
 #define MAC_ADDRESS_LENGTH 6
 #define MAX_RELAY_HOPS 30
 
-/**
- * Returns constant pointer to MAC address of the adapter_name
- */
-unsigned char *const get_mac_address(const char *adapter_name) {
-  struct ifreq request;
-  int socket_fd;
-  // Opening socket
-  if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-    perror("socket");
-    _exit(2);
-  }
-
-  // Getting MAC-address of the computer
-  strcpy(request.ifr_name, adapter_name);
-  if (ioctl(socket_fd, SIOCGIFHWADDR, &request) < 0) {
-    perror("ioctl");
-    _exit(2);
-  }
-  unsigned char *const mac = (unsigned char *)request.ifr_hwaddr.sa_data;
-  return mac;
-}
-
-/**
- * Creates DHCP messages
- */
-dhcp_packet *const dhcp_discover(unsigned char const *mac_address,
-                                 uint8_t *options, size_t options_len) {
+dhcp_packet *discovery(uint8_t adapter_type, const char *adapter_name) {
+  // Preparation for packaging
+  const char *mac = get_mac_address(adapter_name);
+  // Allocate memory for packet
   dhcp_packet *const packet = malloc(sizeof(dhcp_packet));
   packet->op = DHCPDISCOVER;
-  packet->htype = HTYPE_ETHERNET_10MB;
+  packet->htype = adapter_type;
   packet->hlen = MAC_ADDRESS_LENGTH;
   packet->hops = MAX_RELAY_HOPS;
   packet->xid = (uint32_t)rand();
@@ -42,10 +19,12 @@ dhcp_packet *const dhcp_discover(unsigned char const *mac_address,
   packet->yiaddr.s_addr = 0;
   packet->siaddr.s_addr = 0;
   packet->giaddr.s_addr = 0;
-  memcpy(packet->chaddr, mac_address, MAC_ADDRESS_LENGTH);
+  memcpy(packet->chaddr, mac, MAC_ADDRESS_LENGTH);
   memset(packet->sname, 0, DHCP_SNAME_LEN);
   memset(packet->file, 0, DHCP_FILE_LEN);
-  packet->options = malloc(sizeof(uint8_t) * options_len);
-  memcpy(packet->options, options, options_len);
+  packet->options = malloc(sizeof(MAGIC_COOKIE) * sizeof(uint8_t));
+  memcpy(packet->options, MAGIC_COOKIE, sizeof(MAGIC_COOKIE));
+  //  memcpy(packet->options + (uint8_t)4, options, options_len);
+  //  memcpy(packet->options, options, options_len);
   return packet;
 }
