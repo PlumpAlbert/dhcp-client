@@ -20,7 +20,8 @@ dhcp_packet *add_option(dhcp_packet *packet, uint8_t type, uint8_t len,
   unsigned long options_length = strlen((char *)packet->options);
   p->options = malloc(option_length + options_length);
   memcpy(p->options, packet->options, options_length);
-  memcpy(p->options, option_to_byte_array(option), option_length);
+  memcpy(p->options + options_length, option_to_byte_array(option),
+         option_length);
   return p;
 }
 
@@ -49,13 +50,12 @@ dhcp_packet *discovery(uint8_t adapter_type, const char *adapter_name) {
   //  option.length = 0x01;
   //  option.data = malloc(sizeof(uint8_t));
   //  option.data[0] = DHCPDISCOVER;
-  //  const uint8_t len = length(option);
-  //  packet->options = malloc(sizeof(MAGIC_COOKIE) + len);
-  //  memcpy(packet->options, MAGIC_COOKIE, sizeof(MAGIC_COOKIE));
+  packet->options = malloc(sizeof(MAGIC_COOKIE));
+  memcpy(packet->options, MAGIC_COOKIE, sizeof(MAGIC_COOKIE));
   //  memcpy(packet->options + sizeof(MAGIC_COOKIE),
   //  option_to_byte_array(option),
   //         len);
-  uint8_t *q = (uint8_t *){DHCPDISCOVER};
+  uint8_t q[1] = {DHCPDISCOVER};
   dhcp_packet *p = add_option(packet, DHCP_OPTION_MESSAGE_TYPE, 1, q);
   free(packet->options);
   free(packet);
