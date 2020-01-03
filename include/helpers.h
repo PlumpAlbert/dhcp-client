@@ -39,4 +39,6 @@ const uint8_t *packet_to_byte_array(dhcp_packet *packet);
  * Gets the length of the DHCP-option
  */
 uint8_t length(dhcp_option o);
+
+void send_packet(dhcp_packet *packet);
 #endif // DHCP_CLIENT_HELPERS_H

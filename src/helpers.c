@@ -111,3 +111,25 @@ const uint8_t *packet_to_byte_array(dhcp_packet *packet) {
 uint8_t length(dhcp_option o) {
   return sizeof(o.type) + sizeof(o.length) + o.length;
 }
+
+void send_packet(dhcp_packet *packet) {
+  int s = socket(AF_INET, SOCK_STREAM, 0);
+  int enable_broadcast = 1;
+  if (setsockopt(s, SOL_SOCKET, SO_BROADCAST, &enable_broadcast, sizeof(int)) !=
+      0) {
+    perror("Couldn't set socket option for broadcasting");
+    exit(2);
+  }
+  struct sockaddr_in broadcast;
+  memset(&broadcast, 0, sizeof(broadcast));
+  broadcast.sin_family = AF_INET;
+  inet_pton(AF_INET, "255.255.255.255", &broadcast.sin_addr);
+  broadcast.sin_port = htons(SERVER_PORT);
+  const uint8_t *data = to_byte_array(packet);
+  int result = sendto(s, data, strlen((char *)data), 0,
+                      (const struct sockaddr *)&broadcast, sizeof(broadcast));
+  if (result < 0) {
+    perror("Send packet has failed");
+    exit(2);
+  }
+}

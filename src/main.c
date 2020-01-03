@@ -18,5 +18,6 @@ int main(int argc, char const *argv[]) {
                        DHCP_OPTION_END};
   dhcp_packet *packet = discovery(HTYPE_IEEE_802, argv[1]);
   print_packet(packet);
+  send_packet(packet);
   return 0;
 }
