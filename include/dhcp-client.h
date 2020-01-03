@@ -4,7 +4,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "dhcp.h"
 #include "helpers.h"
 
 /**
