@@ -1,6 +1,7 @@
 #include <netinet/ip.h>
 #include <stdint.h>
 
+#define DHCP_CHADDR 16
 #define DHCP_SNAME_LEN 64
 #define DHCP_FILE_LEN 128
 
@@ -83,7 +84,7 @@ typedef struct {
   /* 24: DHCP-Relay agent IP address (Gateway IP address) */
   struct in_addr giaddr;
   /* 28: Client hardware address (MAC-address) */
-  unsigned char chaddr[16];
+  unsigned char chaddr[DHCP_CHADDR];
   /* 44: Optional server host name, null terminated string */
   unsigned char sname[DHCP_SNAME_LEN];
   /**
