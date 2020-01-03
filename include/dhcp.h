@@ -57,6 +57,9 @@
 #define DHCPRELEASE 7
 #define DHCPINFORM 8
 
+#define SERVER_PORT 67
+#define CLIENT_PORT 68
+
 #define MAGIC_COOKIE                                                           \
   (uint8_t[]) { 0x63, 0x82, 0x53, 0x63 }
 
