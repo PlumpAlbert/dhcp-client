@@ -3,7 +3,4 @@ project(dhcp-client VERSION 0.1.0 LANGUAGES C)
 
 set(CMAKE_C_COMPILER "gcc")
 
-file(GLOB SOURCES "**/*.h" "**/*.c")
-message(SOURCES are ${SOURCES})
-
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(dhcp-client include/dhcp.h include/helpers.h include/dhcp-client.h src/dhcp-client.c src/main.c src/helpers.c)
