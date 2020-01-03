@@ -99,6 +99,15 @@ const uint8_t *option_to_byte_array(dhcp_option option) {
   return arr;
 }
 
+const uint8_t *packet_to_byte_array(dhcp_packet *packet) {
+  unsigned long size = sizeof(*packet) - sizeof(packet->options);
+  unsigned long options_size = strlen((char *)packet->options);
+  uint8_t *arr = malloc(size + options_size);
+  memcpy(arr, packet, size);
+  memcpy(arr + size, packet->options, options_size);
+  return arr;
+}
+
 uint8_t length(dhcp_option o) {
   return sizeof(o.type) + sizeof(o.length) + o.length;
 }

@@ -30,6 +30,10 @@ void print_packet(dhcp_packet const *packet);
  * Converts DHCP-option to array of bytes
  */
 const uint8_t *option_to_byte_array(dhcp_option option);
+/*
+ * Converts DHCP-packet to array of bytes
+ */
+const uint8_t *packet_to_byte_array(dhcp_packet *packet);
 
 /*
  * Gets the length of the DHCP-option
