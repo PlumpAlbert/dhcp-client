@@ -13,6 +13,7 @@
 #include <sys/socket.h>
 
 #include "dhcp.h"
+#include "dhcp_option.h"
 
 /**
  * Returns MAC address of the adapter_name
@@ -24,4 +25,14 @@ const char *get_mac_address(const char *adapter_name);
  * Prints packet body to stdout
  */
 void print_packet(dhcp_packet const *packet);
+
+/*
+ * Converts DHCP-option to array of bytes
+ */
+const uint8_t *option_to_byte_array(dhcp_option option);
+
+/*
+ * Gets the length of the DHCP-option
+ */
+uint8_t length(dhcp_option o);
 #endif // DHCP_CLIENT_HELPERS_H

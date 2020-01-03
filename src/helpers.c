@@ -90,3 +90,15 @@ void print_packet(dhcp_packet const *p) {
   }
   printf("============================\n");
 }
+
+const uint8_t *option_to_byte_array(dhcp_option option) {
+  uint8_t *arr = malloc(length(option));
+  arr[0] = option.type;
+  arr[1] = option.length;
+  memcpy(arr + 2, option.data, option.length);
+  return arr;
+}
+
+uint8_t length(dhcp_option o) {
+  return sizeof(o.type) + sizeof(o.length) + o.length;
+}
