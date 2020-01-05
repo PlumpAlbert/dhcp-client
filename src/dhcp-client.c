@@ -26,13 +26,16 @@ dhcp_packet *add_option(dhcp_packet *packet, uint8_t type, uint8_t len,
 }
 
 dhcp_packet *discovery(uint8_t adapter_type, const char *adapter_name) {
-  printf("Getting MAC address of the \"%s\"...\n", argv[1]);
   // Preparation for packaging
-  const char *mac = get_mac_address(adapter_name);
-  printf("MAC address is: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1],
-         mac[2], mac[3], mac[4], mac[5]);
+  const unsigned char *mac = get_mac_address(adapter_name);
+  printf("MAC address of the \"%s\" interface is - ", adapter_name);
+  for (int i = 0; i < MAC_ADDRESS_LENGTH - 1; ++i) {
+    printf("%02X:", mac[i]);
+  }
+  printf("%02X\n", mac[MAC_ADDRESS_LENGTH - 1]);
   // Allocate memory for packet
   dhcp_packet *const packet = malloc(sizeof(dhcp_packet));
+  memset(packet, 0, sizeof(dhcp_packet));
   packet->op = DHCPDISCOVER;
   packet->htype = adapter_type;
   packet->hlen = MAC_ADDRESS_LENGTH;
@@ -47,17 +50,8 @@ dhcp_packet *discovery(uint8_t adapter_type, const char *adapter_name) {
   memcpy(packet->chaddr, mac, MAC_ADDRESS_LENGTH);
   memset(packet->sname, 0, DHCP_SNAME_LEN);
   memset(packet->file, 0, DHCP_FILE_LEN);
-  //  // Adding options
-  //  dhcp_option option;
-  //  option.type = DHCP_OPTION_MESSAGE_TYPE;
-  //  option.length = 0x01;
-  //  option.data = malloc(sizeof(uint8_t));
-  //  option.data[0] = DHCPDISCOVER;
   packet->options = malloc(sizeof(MAGIC_COOKIE));
   memcpy(packet->options, MAGIC_COOKIE, sizeof(MAGIC_COOKIE));
-  //  memcpy(packet->options + sizeof(MAGIC_COOKIE),
-  //  option_to_byte_array(option),
-  //         len);
   uint8_t q[1] = {DHCPDISCOVER};
   dhcp_packet *p = add_option(packet, DHCP_OPTION_MESSAGE_TYPE, 1, q);
   free(packet->options);

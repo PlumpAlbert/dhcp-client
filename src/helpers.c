@@ -18,8 +18,8 @@ const unsigned char *get_mac_address(const char *adapter_name) {
     perror("ioctl");
     exit(2);
   }
-  const unsigned char *mac = request.ifr_hwaddr.sa_data;
-  return mac;
+  // const unsigned char *mac = ;
+  return strdup(request.ifr_hwaddr.sa_data);
 }
 
 void print_packet(dhcp_packet const *p) {
