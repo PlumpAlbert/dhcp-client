@@ -125,7 +125,7 @@ void send_packet(dhcp_packet *packet) {
   broadcast.sin_family = AF_INET;
   inet_pton(AF_INET, "255.255.255.255", &broadcast.sin_addr);
   broadcast.sin_port = htons(SERVER_PORT);
-  const uint8_t *data = to_byte_array(packet);
+  const uint8_t *data = packet_to_byte_array(packet);
   int result = sendto(s, data, strlen((char *)data), 0,
                       (const struct sockaddr *)&broadcast, sizeof(broadcast));
   if (result < 0) {
