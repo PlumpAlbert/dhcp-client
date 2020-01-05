@@ -4,7 +4,7 @@
 
 #ifndef DHCP_CLIENT_DHCP_OPTION_H
 #define DHCP_CLIENT_DHCP_OPTION_H
-#include <unitypes.h>
+#include <stdint.h>
 typedef struct {
   uint8_t type;
   uint8_t length;
