@@ -26,8 +26,11 @@ dhcp_packet *add_option(dhcp_packet *packet, uint8_t type, uint8_t len,
 }
 
 dhcp_packet *discovery(uint8_t adapter_type, const char *adapter_name) {
+  printf("Getting MAC address of the \"%s\"...\n", argv[1]);
   // Preparation for packaging
   const char *mac = get_mac_address(adapter_name);
+  printf("MAC address is: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1],
+         mac[2], mac[3], mac[4], mac[5]);
   // Allocate memory for packet
   dhcp_packet *const packet = malloc(sizeof(dhcp_packet));
   packet->op = DHCPDISCOVER;
