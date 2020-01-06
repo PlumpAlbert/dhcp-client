@@ -3,25 +3,23 @@
 
 #define MAC_ADDRESS_LENGTH 6
 #define MAX_RELAY_HOPS 30
+#define OPTION_HEADER_LEN 2
 
 dhcp_packet *add_option(dhcp_packet *packet, uint8_t type, uint8_t len,
                         uint8_t data[]) {
   // Copying packet
-  dhcp_packet *p = malloc(sizeof(*packet));
-  memcpy(p, packet, sizeof(*packet));
-
-  // Creating DHCP-option
-  dhcp_option option = {.type = type, .length = len};
-  option.data = malloc(len);
-  memcpy(option.data, data, len);
+  dhcp_packet *p = malloc(sizeof(dhcp_packet));
+  memcpy(p, packet, sizeof(dhcp_packet));
 
   // Allocating new options array
-  int8_t option_length = length(option);
-  unsigned long options_length = strlen((char *)packet->options);
-  p->options = malloc(option_length + options_length);
-  memcpy(p->options, packet->options, options_length);
-  memcpy(p->options + options_length, option_to_byte_array(option),
-         option_length);
+  size_t old_options_len = strlen((char *)packet->options);
+  size_t new_options_len = old_options_len + OPTION_HEADER_LEN + len + 1;
+  p->options = malloc(new_options_len);
+  memset(p->options, 0, new_options_len);
+  memcpy(p->options, packet->options, old_options_len);
+  p->options[old_options_len] = type;
+  p->options[old_options_len + 1] = len;
+  memcpy(&p->options[old_options_len + 2], data, len);
   return p;
 }
 
@@ -50,8 +48,9 @@ dhcp_packet *discovery(uint8_t adapter_type, const char *adapter_name) {
   memcpy(packet->chaddr, mac, MAC_ADDRESS_LENGTH);
   memset(packet->sname, 0, DHCP_SNAME_LEN);
   memset(packet->file, 0, DHCP_FILE_LEN);
-  packet->options = malloc(sizeof(MAGIC_COOKIE));
+  packet->options = malloc(sizeof(MAGIC_COOKIE) + 1);
   memcpy(packet->options, MAGIC_COOKIE, sizeof(MAGIC_COOKIE));
+  packet->options[sizeof(MAGIC_COOKIE)] = 0;
   uint8_t q[1] = {DHCPDISCOVER};
   dhcp_packet *p = add_option(packet, DHCP_OPTION_MESSAGE_TYPE, 1, q);
   free(packet->options);
