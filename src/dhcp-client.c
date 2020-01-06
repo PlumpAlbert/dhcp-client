@@ -1,5 +1,5 @@
 #include "../include/dhcp-client.h"
-#include "../include/dhcp_option.h"
+#include <net/if.h>
 
 #define MAC_ADDRESS_LENGTH 6
 #define MAX_RELAY_HOPS 30

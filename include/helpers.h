@@ -13,7 +13,6 @@
 #include <sys/socket.h>
 
 #include "dhcp.h"
-#include "dhcp_option.h"
 
 /**
  * Returns MAC address of the adapter_name
@@ -27,18 +26,16 @@ const unsigned char *get_mac_address(const char *adapter_name);
 void print_packet(dhcp_packet const *packet);
 
 /*
- * Converts DHCP-option to array of bytes
- */
-const uint8_t *option_to_byte_array(dhcp_option option);
-/*
  * Converts DHCP-packet to array of bytes
  */
-const uint8_t *packet_to_byte_array(dhcp_packet *packet);
+const uint8_t *packet_to_byte_array(dhcp_packet *packet, unsigned long *const data_len);
 
 /*
- * Gets the length of the DHCP-option
+ * Opens socket for the network adapter
+ * @param adapter_name - Name of the network adapter to use for DHCP message
+ * creation
  */
-uint8_t length(dhcp_option o);
+int open_socket(const char *adapter_name);
 
-void send_packet(dhcp_packet *packet);
+void send_packet(int, dhcp_packet *);
 #endif // DHCP_CLIENT_HELPERS_H
