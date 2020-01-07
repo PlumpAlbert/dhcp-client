@@ -80,7 +80,7 @@ void print_packet(dhcp_packet const *p) {
       printf("| %02X |\n", 1);
       break;
     }
-    printf("| %02d | %02d | ", p->options[i], p->options[i + 1]);
+    printf("| %d | %d | ", p->options[i], p->options[i + 1]);
     for (size_t j = 2; j - 2 < p->options[i + 1]; ++j)
       printf("%02X", p->options[i + j]);
     printf(" |\n");
@@ -125,9 +125,9 @@ int open_socket(const char *adapter_name) {
 
   memset(&client_addr, 0, sizeof(struct sockaddr));
   client_addr.sin_family = AF_INET;
-  client_addr.sin_port = htons(CLIENT_PORT);
-  //    client_addr.sin_addr.s_addr = 0;
-  memset(&client_addr.sin_zero, 0, sizeof(client_addr.sin_zero));
+    client_addr.sin_port = htons(CLIENT_PORT);
+    client_addr.sin_addr.s_addr = 0;
+    memset(&client_addr.sin_zero, 0, sizeof(client_addr.sin_zero));
   sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
   if (sock < 0) {
     perror("Error opening socket");
